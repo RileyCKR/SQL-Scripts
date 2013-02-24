@@ -11,23 +11,15 @@ AS BEGIN
 END
 GO
 
-DECLARE @index INT = 1
+DECLARE @index INT = 0
 DECLARE @top INT
 SELECT @top = MAX(NodeLevel) FROM CMS_Tree
 
---Clean aliases starting from the root and moving out
-EXEC [dbo].[SoftMedia_CleanAliases] @AliasLevel = 1
-GO
-EXEC [dbo].[SoftMedia_CleanAliases] @AliasLevel = 2
-GO
-EXEC [dbo].[SoftMedia_CleanAliases] @AliasLevel = 3
-GO
-EXEC [dbo].[SoftMedia_CleanAliases] @AliasLevel = 4
-GO
-EXEC [dbo].[SoftMedia_CleanAliases] @AliasLevel = 5
-GO
-EXEC [dbo].[SoftMedia_CleanAliases] @AliasLevel = 6
-GO
+WHILE (@index < @top)
+BEGIN
+	SET @index = @index + 1
+	EXEC [dbo].[SoftMedia_CleanAliases] @AliasLevel = @index
+END
 
 --Cleanup stored proc
 DROP PROCEDURE [dbo].[SoftMedia_CleanAliases]
